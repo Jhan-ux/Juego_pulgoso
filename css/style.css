@@ -24,6 +24,24 @@ canvas {
   border-radius: 12px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.04);
   margin-bottom: 24px;
+  width: 100vw;
+  max-width: 800px;
+  height: 37vw;
+  max-height: 300px;
+  display: block;
+}
+
+@media (max-width: 600px) {
+  #game-container {
+    min-height: 80vh;
+    padding: 0 2vw;
+  }
+  canvas {
+    width: 98vw;
+    height: 45vw;
+    max-width: 100vw;
+    max-height: 60vw;
+  }
 }
 
 .score {

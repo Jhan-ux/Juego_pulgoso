@@ -30,12 +30,22 @@ async function initTeachableMachine() {
   await tmWebcam.play();
   window.requestAnimationFrame(loopTeachableMachine);
   tmReady = true;
-  // Opcional: mostrar la webcam en pantalla
+  // Mostrar la webcam en pantalla y adaptarla en móvil
   document.body.appendChild(tmWebcam.canvas);
   tmWebcam.canvas.style.position = "absolute";
   tmWebcam.canvas.style.top = "10px";
   tmWebcam.canvas.style.right = "10px";
   tmWebcam.canvas.style.zIndex = 1000;
+  if (window.innerWidth < 600) {
+    tmWebcam.canvas.style.width = '120px';
+    tmWebcam.canvas.style.height = '120px';
+    tmWebcam.canvas.style.left = 'auto';
+    tmWebcam.canvas.style.right = '10px';
+    tmWebcam.canvas.style.top = '10px';
+  } else {
+    tmWebcam.canvas.style.width = '200px';
+    tmWebcam.canvas.style.height = '200px';
+  }
 }
 
 async function loopTeachableMachine() {
@@ -562,7 +572,39 @@ function checkAABB(a, b) {
 // ===================== INICIO =====================
 window.onload = function() {
   cargarImagenes(() => {
+    ajustarCanvas();
+    window.addEventListener('resize', ajustarCanvas);
     init();
     initTeachableMachine();
+    canvas.addEventListener('touchstart', handleTouch);
   });
 };
+
+function ajustarCanvas() {
+  const w = Math.min(window.innerWidth * 0.98, 800);
+  const h = Math.min(window.innerHeight * 0.45, 300);
+  canvas = document.getElementById('game-canvas');
+  canvas.width = w;
+  canvas.height = h;
+  if (typeof CONFIG !== 'undefined') {
+    CONFIG.CANVAS_WIDTH = w;
+    CONFIG.CANVAS_HEIGHT = h;
+  }
+}
+
+function handleTouch(e) {
+  e.preventDefault();
+  if (!started) {
+    started = true;
+    gameOver = false;
+    score = 0;
+    obstaculos = [];
+    personaje = new Personaje(CONFIG.PERSONAJE);
+    lastObstacleX = CONFIG.CANVAS_WIDTH;
+    loop();
+  } else if (!gameOver) {
+    personaje.saltar();
+  } else if (gameOver) {
+    init();
+  }
+}
