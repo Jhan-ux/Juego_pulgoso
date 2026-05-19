@@ -576,7 +576,13 @@ window.onload = function() {
     window.addEventListener('resize', ajustarCanvas);
     init();
     initTeachableMachine();
-    canvas.addEventListener('touchstart', handleTouch);
+    // Soporte táctil robusto: canvas y contenedor
+    setTimeout(() => {
+      const canvasEl = document.getElementById('game-canvas');
+      const container = document.getElementById('game-container');
+      if (canvasEl) canvasEl.addEventListener('touchstart', handleTouch, {passive: false});
+      if (container) container.addEventListener('touchstart', handleTouch, {passive: false});
+    }, 500);
   });
 };
 
