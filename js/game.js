@@ -22,6 +22,9 @@ const scripts = {
   desierto: 'js/escenario_desierto.js',
   nieve: 'js/escenario_nieve.js',
 };
+  if (typeof setupGestureRecognition === 'function') {
+    setupGestureRecognition();
+  }
 if (!window[`dibujarEscenario_${escenario.charAt(0).toUpperCase() + escenario.slice(1)}`]) {
   const s = document.createElement('script');
   s.src = scripts[escenario];
@@ -215,6 +218,12 @@ function init() {
   started = false;
   lastObstacleX = CONFIG.CANVAS_WIDTH;
   dibujarPantallaInicio();
+  window.handleGesture = function(label) {
+    if (label === "Salto" && !gameOver) {
+      personaje.saltar();
+    }
+    // Puedes agregar más gestos aquí
+  };
 }
 
 // ===================== INPUT HANDLER =====================
@@ -363,5 +372,24 @@ function checkAABB(a, b) {
 
 // ===================== INICIO =====================
 window.onload = function() {
-  cargarImagenes(init);
+  cargarImagenes(() => {
+    init();
+    // Botones para IA
+    const btnCamara = document.getElementById('btn-camara');
+    const btnMicro = document.getElementById('btn-micro');
+    if (btnCamara && typeof setupGestureRecognition === 'function') {
+      btnCamara.addEventListener('click', () => {
+        setupGestureRecognition();
+        btnCamara.disabled = true;
+        btnCamara.textContent = 'Cámara activada';
+      });
+    }
+    if (btnMicro && typeof setupVoiceRecognition === 'function') {
+      btnMicro.addEventListener('click', () => {
+        setupVoiceRecognition();
+        btnMicro.disabled = true;
+        btnMicro.textContent = 'Micrófono activado';
+      });
+    }
+  });
 };

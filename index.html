@@ -39,14 +39,18 @@
       </select>
     </label>
     <canvas id="game-canvas"></canvas>
-    <p id="hint-text">Presiona <b>ESPACIO</b>, <b>↑</b> o <b>TOCA</b> para saltar y empezar.</p>
+    <div style="margin: 16px 0;">
+      <button id="btn-camara" style="font-size:18px;padding:8px 18px;margin-right:10px;">Activar cámara (gestos)</button>
+      <button id="btn-micro" style="font-size:18px;padding:8px 18px;">Activar micrófono (voz)</button>
+    </div>
+    <p id="hint-text">Presiona <b>ESPACIO</b>, <b>↑</b> o <b>TOCA</b> para saltar y empezar.<br>
+    O usa los botones para jugar con IA.</p>
     <div id="mobile-desc" style="max-width:400px;margin:18px auto 0 auto;color:#1976d2;font-size:1.1em;text-align:center;display:block;">
       <b>IMPORTANTE:</b> Si usas un teléfono o tablet, <b>TOCA LA PANTALLA</b> para iniciar el juego y permitir el acceso a la cámara.<br>
       Si tu navegador pregunta, acepta el permiso de cámara para jugar con gestos.
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
   <script>
     // Guardar selección de escenario en localStorage y recargar
     const select = document.getElementById('escenario-select');
@@ -56,6 +60,8 @@
       location.reload();
     });
   </script>
+  <script src="js/gesture_recognition.js"></script>
+  <script src="js/reconocimiento_voz.js"></script>
   <script src="js/game.js"></script>
 </body>
 </html>
