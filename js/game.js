@@ -574,17 +574,40 @@ window.onload = function() {
   cargarImagenes(() => {
     ajustarCanvas();
     window.addEventListener('resize', ajustarCanvas);
-    init();
-    initTeachableMachine();
-    // Soporte táctil robusto: canvas y contenedor
-    setTimeout(() => {
-      const canvasEl = document.getElementById('game-canvas');
-      const container = document.getElementById('game-container');
-      if (canvasEl) canvasEl.addEventListener('touchstart', handleTouch, {passive: false});
-      if (container) container.addEventListener('touchstart', handleTouch, {passive: false});
-    }, 500);
+    initPantallaInicioTouch();
   });
 };
+
+function initPantallaInicioTouch() {
+  // Mostrar mensaje de inicio
+  const hint = document.getElementById('hint-text');
+  if (hint) hint.innerHTML = 'Toca la pantalla para empezar y activar la cámara.';
+  const canvasEl = document.getElementById('game-canvas');
+  const container = document.getElementById('game-container');
+  if (canvasEl) canvasEl.addEventListener('touchstart', primerTouch, {passive: false});
+  if (container) container.addEventListener('touchstart', primerTouch, {passive: false});
+}
+
+let juegoIniciado = false;
+function primerTouch(e) {
+  e.preventDefault();
+  if (!juegoIniciado) {
+    juegoIniciado = true;
+    // Iniciar juego y cámara
+    init();
+    initTeachableMachine();
+    // Cambiar mensaje
+    const hint = document.getElementById('hint-text');
+    if (hint) hint.innerHTML = 'Toca para saltar. Usa gestos frente a la cámara.';
+  } else {
+    // Saltar si el juego ya está iniciado
+    if (!gameOver && personaje && personaje.enSuelo) {
+      personaje.saltar();
+    } else if (gameOver) {
+      init();
+    }
+  }
+}
 
 function ajustarCanvas() {
   const w = Math.min(window.innerWidth * 0.98, 800);
