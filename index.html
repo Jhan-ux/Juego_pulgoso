@@ -30,6 +30,14 @@
 <body>
   <div id="game-container">
     <h1>Juego Pulgoso</h1>
+    <label for="escenario-select" style="font-size:18px;margin-bottom:8px;">Escenario:
+      <select id="escenario-select" style="font-size:18px;margin-left:8px;">
+        <option value="oficina">Oficina</option>
+        <option value="bosque">Bosque</option>
+        <option value="desierto">Desierto</option>
+        <option value="nieve">Nieve</option>
+      </select>
+    </label>
     <canvas id="game-canvas"></canvas>
     <p id="hint-text">Presiona <b>ESPACIO</b>, <b>↑</b> o <b>TOCA</b> para saltar y empezar.</p>
     <div id="mobile-desc" style="max-width:400px;margin:18px auto 0 auto;color:#1976d2;font-size:1.1em;text-align:center;display:block;">
@@ -39,6 +47,15 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
+  <script>
+    // Guardar selección de escenario en localStorage y recargar
+    const select = document.getElementById('escenario-select');
+    select.value = localStorage.getItem('escenario') || 'oficina';
+    select.addEventListener('change', function() {
+      localStorage.setItem('escenario', select.value);
+      location.reload();
+    });
+  </script>
   <script src="js/game.js"></script>
 </body>
 </html>
