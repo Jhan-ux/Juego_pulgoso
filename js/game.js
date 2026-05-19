@@ -584,21 +584,30 @@ function initPantallaInicioTouch() {
   if (hint) hint.innerHTML = 'Toca la pantalla para empezar y activar la cámara.';
   const canvasEl = document.getElementById('game-canvas');
   const container = document.getElementById('game-container');
-  if (canvasEl) canvasEl.addEventListener('touchstart', primerTouch, {passive: false});
-  if (container) container.addEventListener('touchstart', primerTouch, {passive: false});
+  // Soporte táctil y click
+  if (canvasEl) {
+    canvasEl.addEventListener('touchstart', primerTouch, {passive: false});
+    canvasEl.addEventListener('click', primerTouch, {passive: false});
+  }
+  if (container) {
+    container.addEventListener('touchstart', primerTouch, {passive: false});
+    container.addEventListener('click', primerTouch, {passive: false});
+  }
 }
 
 let juegoIniciado = false;
 function primerTouch(e) {
-  e.preventDefault();
+  if (e) e.preventDefault();
   if (!juegoIniciado) {
     juegoIniciado = true;
     // Iniciar juego y cámara
     init();
     initTeachableMachine();
-    // Cambiar mensaje
+    // Cambiar mensaje y ocultar descripción móvil
     const hint = document.getElementById('hint-text');
     if (hint) hint.innerHTML = 'Toca para saltar. Usa gestos frente a la cámara.';
+    const desc = document.getElementById('mobile-desc');
+    if (desc) desc.style.display = 'none';
   } else {
     // Saltar si el juego ya está iniciado
     if (!gameOver && personaje && personaje.enSuelo) {
