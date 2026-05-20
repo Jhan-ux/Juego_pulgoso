@@ -27,8 +27,9 @@ async function initTeachableVoice() {
   await tmAudioRecognizer.listen(result => {
     const prediction = result.scores.indexOf(Math.max(...result.scores));
     const label = tmAudioModel.labels[prediction];
+    console.log('Reconocido:', label, result.scores);
     if (label === 'salta') {
       if (typeof window.handleGesture === 'function') window.handleGesture('Salto');
     }
-  }, { probabilityThreshold: 0.85 });
+  }, { probabilityThreshold: 0.6 });
 }
