@@ -86,3 +86,32 @@ canvas {
   font-size: 1.1rem;
   margin-top: 8px;
 }
+
+.voice-status {
+  width: min(92vw, 520px);
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 2px solid #cfd8dc;
+  border-radius: 8px;
+  color: #37474f;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  margin: -6px 0 12px;
+  padding: 10px 14px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.05);
+}
+
+.voice-status.is-listening {
+  border-color: #2e7d32;
+  background: #f1f8e9;
+}
+
+.voice-status.is-detected {
+  border-color: #1565c0;
+  background: #e3f2fd;
+}
+
+.voice-status.is-error {
+  border-color: #c62828;
+  background: #ffebee;
+}
