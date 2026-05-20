@@ -3,7 +3,21 @@
 const TM_AUDIO_URL = 'assets/model_audio/';
 let tmAudioModel, tmAudioRecognizer;
 
+
+async function waitForTmAudio() {
+  return new Promise(resolve => {
+    if (window.tmAudio) return resolve();
+    const check = setInterval(() => {
+      if (window.tmAudio) {
+        clearInterval(check);
+        resolve();
+      }
+    }, 50);
+  });
+}
+
 async function initTeachableVoice() {
+  await waitForTmAudio();
   if (!window.tmAudio) {
     alert('No se encontró la librería de Teachable Machine Audio.');
     return;
