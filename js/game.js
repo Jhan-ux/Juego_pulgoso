@@ -21,11 +21,12 @@ const scripts = {
   bosque: 'js/escenario_bosque.js',
   desierto: 'js/escenario_desierto.js',
   nieve: 'js/escenario_nieve.js',
+  prueba: 'js/escenario_prueba.js',
 };
-  if (typeof setupGestureRecognition === 'function') {
-    setupGestureRecognition();
-  }
-if (!window[`dibujarEscenario_${escenario.charAt(0).toUpperCase() + escenario.slice(1)}`]) {
+if (typeof setupGestureRecognition === 'function') {
+  setupGestureRecognition();
+}
+if (!window[`dibujarEscenario${escenario.charAt(0).toUpperCase() + escenario.slice(1)}`] && scripts[escenario]) {
   const s = document.createElement('script');
   s.src = scripts[escenario];
   document.head.appendChild(s);
@@ -219,30 +220,47 @@ function init() {
   lastObstacleX = CONFIG.CANVAS_WIDTH;
   dibujarPantallaInicio();
   window.handleGesture = function(label) {
-    if (label === "Salto" && !gameOver) {
-      personaje.saltar();
+    if (label === "Salto") {
+      saltarOIniciar();
     }
     // Puedes agregar más gestos aquí
   };
+  window.handleVoiceJump = saltarOIniciar;
 }
 
 // ===================== INPUT HANDLER =====================
+function iniciarPartida() {
+  started = true;
+  gameOver = false;
+  score = 0;
+  obstaculos = [];
+  personaje = new Personaje(CONFIG.PERSONAJE);
+  lastObstacleX = CONFIG.CANVAS_WIDTH;
+  loop();
+}
+
+function saltarOIniciar() {
+  if (!started) {
+    iniciarPartida();
+    personaje.saltar();
+  } else if (!gameOver) {
+    personaje.saltar();
+  } else {
+    init();
+  }
+}
+
 document.addEventListener('keydown', function(e) {
   if ((e.code === 'Space' || e.code === 'ArrowUp')) {
-    if (!started) {
-      started = true;
-      gameOver = false;
-      score = 0;
-      obstaculos = [];
-      personaje = new Personaje(CONFIG.PERSONAJE);
-      lastObstacleX = CONFIG.CANVAS_WIDTH;
-      loop();
-    } else if (!gameOver) {
-      personaje.saltar();
-    } else if (gameOver) {
-      init();
-    }
+    saltarOIniciar();
   }
+});
+
+document.addEventListener('pointerdown', function(e) {
+  if (e.target.closest('button, select, label')) {
+    return;
+  }
+  saltarOIniciar();
 });
 
 // ===================== GAME LOOP =====================
@@ -259,7 +277,7 @@ function actualizar() {
   personaje.actualizar();
 
   // Obstáculos
-  if (started) {
+  if (started && escenario !== 'prueba') {
     // Generar nuevo obstáculo si es necesario
     if (
       obstaculos.length === 0 ||
@@ -275,10 +293,12 @@ function actualizar() {
   obstaculos = obstaculos.filter(ob => ob.x + ob.width > 0);
 
   // Colisiones
-  for (let ob of obstaculos) {
-    if (checkAABB(personaje.getAABB(), ob.getAABB())) {
-      gameOver = true;
-      break;
+  if (escenario !== 'prueba') {
+    for (let ob of obstaculos) {
+      if (checkAABB(personaje.getAABB(), ob.getAABB())) {
+        gameOver = true;
+        break;
+      }
     }
   }
 
@@ -351,7 +371,7 @@ function dibujarPantallaInicio() {
   ctx.fillText('Juego Pulgoso', CONFIG.CANVAS_WIDTH / 2, 90);
   ctx.font = '24px Segoe UI, Arial';
   ctx.fillStyle = '#888';
-  ctx.fillText('Presiona ESPACIO o ↑ para iniciar', CONFIG.CANVAS_WIDTH / 2, 140);
+  ctx.fillText('Presiona ESPACIO, toca o di salta', CONFIG.CANVAS_WIDTH / 2, 140);
   ctx.restore();
 }
 
@@ -374,12 +394,10 @@ function checkAABB(a, b) {
 window.onload = function() {
   cargarImagenes(() => {
     init();
-    const btnTMVoz = document.getElementById('btn-tm-voz');
-    if (btnTMVoz && typeof initTeachableVoice === 'function') {
-      btnTMVoz.addEventListener('click', function() {
-        initTeachableVoice();
-        btnTMVoz.disabled = true;
-        btnTMVoz.textContent = 'Voz TM activada';
+    const btnVoz = document.getElementById('btn-voz');
+    if (btnVoz && typeof setupVoiceRecognition === 'function') {
+      btnVoz.addEventListener('click', function() {
+        setupVoiceRecognition();
       });
     }
   });
