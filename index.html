@@ -40,8 +40,7 @@
     </label>
     <canvas id="game-canvas"></canvas>
     <div style="margin: 16px 0;">
-      <button id="btn-camara" style="font-size:18px;padding:8px 18px;margin-right:10px;">Activar cámara (gestos)</button>
-      <button id="btn-micro" style="font-size:18px;padding:8px 18px;">Activar micrófono (voz)</button>
+      <button id="btn-tm-voz" style="font-size:18px;padding:8px 18px;">Activar voz (Teachable Machine)</button>
     </div>
     <p id="hint-text">Presiona <b>ESPACIO</b>, <b>↑</b> o <b>TOCA</b> para saltar y empezar.<br>
     O usa los botones para jugar con IA.</p>
@@ -60,8 +59,9 @@
       location.reload();
     });
   </script>
-  <script src="js/gesture_recognition.js"></script>
-  <script src="js/reconocimiento_voz.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/audio"></script>
+  <script src="js/teachable_voice.js"></script>
   <script src="js/game.js"></script>
 </body>
 </html>

@@ -374,21 +374,12 @@ function checkAABB(a, b) {
 window.onload = function() {
   cargarImagenes(() => {
     init();
-    // Botones para IA
-    const btnCamara = document.getElementById('btn-camara');
-    const btnMicro = document.getElementById('btn-micro');
-    if (btnCamara && typeof setupGestureRecognition === 'function') {
-      btnCamara.addEventListener('click', () => {
-        setupGestureRecognition();
-        btnCamara.disabled = true;
-        btnCamara.textContent = 'Cámara activada';
-      });
-    }
-    if (btnMicro && typeof setupVoiceRecognition === 'function') {
-      btnMicro.addEventListener('click', () => {
-        setupVoiceRecognition();
-        btnMicro.disabled = true;
-        btnMicro.textContent = 'Micrófono activado';
+    const btnTMVoz = document.getElementById('btn-tm-voz');
+    if (btnTMVoz && typeof initTeachableVoice === 'function') {
+      btnTMVoz.addEventListener('click', function() {
+        initTeachableVoice();
+        btnTMVoz.disabled = true;
+        btnTMVoz.textContent = 'Voz TM activada';
       });
     }
   });
