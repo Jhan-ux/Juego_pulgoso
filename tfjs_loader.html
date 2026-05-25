@@ -1,0 +1,15 @@
+<!-- Carga TensorFlow.js solo si no está cargado -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.18.0/dist/tf.min.js"></script>
+<script src="js/keyword_spotting.js"></script>
+
+<button id="start-spotting">Iniciar reconocimiento de palabra clave</button>
+<div id="spotting-result"></div>
+
+<script>
+	document.getElementById('start-spotting').onclick = function() {
+		document.getElementById('spotting-result').innerText = 'Escuchando...';
+		startKeywordSpotting(() => {
+			document.getElementById('spotting-result').innerText = '¡Palabra clave detectada!';
+		});
+	};
+</script>

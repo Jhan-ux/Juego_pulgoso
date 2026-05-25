@@ -226,6 +226,14 @@ function init() {
     // Puedes agregar más gestos aquí
   };
   window.handleVoiceJump = saltarOIniciar;
+
+  // --- INTEGRACIÓN KEYWORD SPOTTING (no interfiere con voz nativa) ---
+  if (typeof startKeywordSpotting === 'function') {
+    startKeywordSpotting(() => {
+      if (typeof window.handleVoiceJump === 'function') window.handleVoiceJump();
+    });
+  }
+  // Si quieres detenerlo, llama stopKeywordSpotting();
 }
 
 // ===================== INPUT HANDLER =====================
